@@ -1,0 +1,45 @@
+:host {
+    position: relative;
+}
+table {
+    width: 100%;
+    & .mat-cell.no-data {
+        text-align: center;
+    }
+
+    & .mat-column-abbreviation {
+        min-width: 100px;
+    }
+
+    & .mat-column-expansion {
+        width: 40%;
+    }
+
+    & .mat-column-notes {
+        max-width: 20%;
+    }
+    & .mat-column-edit {
+        width: 20px;
+        & button {
+            left: 10px;
+        }
+    }
+    tr:hover {
+        background: whitesmoke;
+    }
+}
+mat-form-field {
+    width: 100%;
+}
+button.add-button {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 100;
+    font-size: xx-large;
+}
+tr:not(:hover) {
+    button.edit-button {
+        visibility: hidden;
+    }
+}

@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>{{mode}} {{mode==='Editing'?data.abbreviation:''}}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Abbreviation</mat-label>
+    <input matInput [(ngModel)]="data.abbreviation">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Expansion</mat-label>
+    <input matInput [(ngModel)]="data.expansion">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Context</mat-label>
+    <input matInput [(ngModel)]="data.context">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Notes</mat-label>
+    <input matInput [(ngModel)]="data.description">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>
