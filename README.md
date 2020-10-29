@@ -1,2 +1,2 @@
 # abbreviations-slack-app
-Slack app for expanding abbreviations used within an organization
+Slack app and Web GUI for expanding abbreviations used within an organization

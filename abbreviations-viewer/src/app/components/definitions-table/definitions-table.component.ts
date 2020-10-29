@@ -21,14 +21,14 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   definitions: MatTableDataSource<DefinitionItem>;
   displayedColumns: string[] =
       ['abbreviation', 'expansion', 'description', 'contributor', 'edit'];
-  authorized = false;
+  user: string;
   private viewInitialized = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   ngOnInit(): void {
     this.firebaseService.user.subscribe((user) => {
       if (user) {
-        this.authorized = true;
+        this.user = user.displayName;
         this.definitionsService.getAll().subscribe((val) => {
           this.definitions = new MatTableDataSource(val);
           if (this.viewInitialized) {
@@ -50,10 +50,12 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.definitions.filter = filterValue.trim().toLowerCase();
+    if (this.definitions) {
+      this.definitions.filter = filterValue.trim().toLowerCase();
 
-    if (this.definitions.paginator) {
-      this.definitions.paginator.firstPage();
+      if (this.definitions.paginator) {
+        this.definitions.paginator.firstPage();
+      }
     }
   }
   addNewEntry() {

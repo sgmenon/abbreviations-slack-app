@@ -1,6 +1,15 @@
 :host {
     position: relative;
 }
+.login-icon {
+    padding: 0 14px;
+}
+.spacer {
+    flex: 1 1 auto;
+}
+.table-wrapper {
+    margin: 8px;
+}
 table {
     width: 100%;
     & .mat-cell.no-data {
