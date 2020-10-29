@@ -21,7 +21,7 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   definitions: MatTableDataSource<DefinitionItem>;
   displayedColumns: string[] =
       ['abbreviation', 'expansion', 'description', 'contributor', 'edit'];
-  user: string;
+  user?: string;
   private viewInitialized = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -85,5 +85,11 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
             id => console.log(`Modified ${id}`));
       }
     });
+  }
+  async signOut() {
+    this.definitionsService.unsubscribeAll();
+    await this.firebaseService.signOut();
+    this.definitions.data = [];
+    this.user = undefined;
   }
 }

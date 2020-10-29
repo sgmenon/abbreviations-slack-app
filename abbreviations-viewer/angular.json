@@ -34,7 +34,8 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "firebase",
-              "csv-parse"
+              "csv-parse",
+              "@firebase/component"
             ]
           },
           "configurations": {

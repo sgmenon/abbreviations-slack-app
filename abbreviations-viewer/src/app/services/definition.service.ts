@@ -17,15 +17,8 @@ export interface DefinitionItem {
 @Injectable({providedIn: 'root'})
 export class DefinitionService {
   private userEmail: string;
-  constructor(public firebaseServices: FirebaseService) {
-    this.firebaseServices.user.subscribe(user => {
-      if (user) {
-        this.userEmail = user.email;
-      }
-    });
-  }
-
-  definitionConverter = {
+  private unsubscribeOnSnapshotFcn: any;
+  private definitionConverter = {
     toFirestore: (data: DefinitionItem) => {
       const {id, contributor, ...retVal} = data;
       return {
@@ -39,6 +32,21 @@ export class DefinitionService {
           return {...data, id: snapshot.id};
         }
   };
+
+
+  constructor(public firebaseServices: FirebaseService) {
+    this.firebaseServices.user.subscribe(user => {
+      if (user) {
+        this.userEmail = user.email;
+      }
+    });
+  }
+
+  unsubscribeAll() {
+    if (this.unsubscribeOnSnapshotFcn) {
+      this.unsubscribeOnSnapshotFcn();
+    }
+  }
 
   add(item: DefinitionItem) {
     return new Promise((resolve, reject) => {
@@ -90,16 +98,17 @@ export class DefinitionService {
   getAll(): Observable<DefinitionItem[]> {
     return new Observable<DefinitionItem[]>(subscriber => {
       const retVal: DefinitionItem[] = [];
-      this.firebaseServices.db.collection('entries')
-          .withConverter(this.definitionConverter)
-          .onSnapshot(querySnapshots => {
-            querySnapshots.forEach((doc) => {
-              if (doc.exists) {
-                retVal.push(doc.data());
-              }
-            });
-            subscriber.next(retVal);
-          });
+      this.unsubscribeOnSnapshotFcn =
+          this.firebaseServices.db.collection('entries')
+              .withConverter(this.definitionConverter)
+              .onSnapshot(querySnapshots => {
+                querySnapshots.forEach((doc) => {
+                  if (doc.exists) {
+                    retVal.push(doc.data());
+                  }
+                });
+                subscriber.next(retVal);
+              });
     });
   }
 

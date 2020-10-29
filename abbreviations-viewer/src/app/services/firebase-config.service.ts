@@ -2,8 +2,8 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
-import 'firebase/analytics';
-import 'firebase/performance';
+// import 'firebase/analytics';
+// import 'firebase/performance';
 
 import {Injectable} from '@angular/core';
 import * as firebase from 'firebase/app';
@@ -47,10 +47,13 @@ export class FirebaseService {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.user.next(user);
+      } else {
+        this.user.next(undefined);
+        this.credential = undefined;
       }
     });
-    firebase.analytics();
-    firebase.performance();
+    // firebase.analytics();
+    // firebase.performance();
   }
 
   checkLoadedServices() {
@@ -75,6 +78,7 @@ export class FirebaseService {
   authenticate() {
     return new Promise((resolve, reject) => {
       const provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({hd: 'motional.com'});
       firebase.auth()
           .setPersistence(firebase.auth.Auth.Persistence.SESSION)
           .then(() => {
@@ -101,6 +105,23 @@ export class FirebaseService {
                   reject(this.errorInfo);
                 });
           });
+    });
+  }
+
+  signOut() {
+    return new Promise<boolean>((resolve, reject) => {
+      if (this.user.getValue()) {
+        firebase.auth()
+            .signOut()
+            .then(() => {
+              resolve(true);
+            })
+            .catch((err) => {
+              reject(err);
+            });
+      } else {
+        resolve(false);
+      }
     });
   }
 }

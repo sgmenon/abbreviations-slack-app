@@ -4,7 +4,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "site": "sidmenon-playground",
+    "site": "motional-whatis",
     "public": "abbreviations-viewer/dist/abbreviations-viewer",
     "ignore": [
       "firebase.json",
@@ -18,10 +18,6 @@
       },
       {
         "source": "/main",
-        "destination": "/index.html"
-      },
-      {
-        "source": "/login",
         "destination": "/index.html"
       }
     ]

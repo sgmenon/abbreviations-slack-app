@@ -5,6 +5,7 @@
         <span>Welcome {{user}}</span>
         <mat-icon class="login-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user
         </mat-icon>
+        <button mat-raised-button (click)="signOut()">Sign Out</button>
     </ng-container>
     <ng-template #login>
         <app-login></app-login>
