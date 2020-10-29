@@ -97,11 +97,11 @@ export class DefinitionService {
 
   getAll(): Observable<DefinitionItem[]> {
     return new Observable<DefinitionItem[]>(subscriber => {
-      const retVal: DefinitionItem[] = [];
       this.unsubscribeOnSnapshotFcn =
           this.firebaseServices.db.collection('entries')
               .withConverter(this.definitionConverter)
               .onSnapshot(querySnapshots => {
+                const retVal: DefinitionItem[] = [];
                 querySnapshots.forEach((doc) => {
                   if (doc.exists) {
                     retVal.push(doc.data());
@@ -112,7 +112,7 @@ export class DefinitionService {
     });
   }
 
-  resetDb(csvFileName: string = 'AcronymsSeed') {
+  uploadCSV(csvFileName: string /*eg. AcronymsSeed*/) {
     const pathReference =
         this.firebaseServices.storage.ref(`acronyms/${csvFileName}.csv`);
     return new Promise((resolve, reject) => {
@@ -120,7 +120,7 @@ export class DefinitionService {
           .then((url) => {
             const xhr = new XMLHttpRequest();
             xhr.responseType = 'blob';
-            xhr.onload = (event) => {
+            xhr.onload = (/*event*/) => {
               const blob: Blob = xhr.response;
               blob.text().then((value) => {
                 const converter = csv().fromString(value).then((jsonValues) => {
