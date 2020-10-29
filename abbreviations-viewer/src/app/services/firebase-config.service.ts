@@ -80,7 +80,7 @@ export class FirebaseService {
       const provider = new firebase.auth.GoogleAuthProvider();
       provider.setCustomParameters({hd: 'motional.com'});
       firebase.auth()
-          .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+          .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
           .then(() => {
             firebase.auth()
                 .signInWithPopup(provider)

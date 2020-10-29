@@ -19,8 +19,9 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
       private definitionsService: DefinitionService,
       private dialog: MatDialog) {}
   definitions: MatTableDataSource<DefinitionItem>;
-  displayedColumns: string[] =
-      ['abbreviation', 'expansion', 'description', 'contributor', 'edit'];
+  displayedColumns: string[] = [
+    'abbreviation', 'expansion', 'description', 'context', 'contributor', 'edit'
+  ];
   user?: string;
   private viewInitialized = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;

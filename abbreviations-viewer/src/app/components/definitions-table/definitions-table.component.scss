@@ -19,11 +19,14 @@ table {
     }
 
     & .mat-column-expansion {
-        width: 40%;
+        width: 20%;
     }
-
+    & .mat-column-context {
+        min-width: 20%;
+    }
     & .mat-column-notes {
-        max-width: 20%;
+        min-width: 20%;
+        max-width: 40%;
     }
     & .mat-column-edit {
         width: 20px;
