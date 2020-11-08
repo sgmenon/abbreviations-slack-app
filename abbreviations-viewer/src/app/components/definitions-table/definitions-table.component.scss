@@ -41,12 +41,15 @@ table {
 mat-form-field {
     width: 100%;
 }
-button.add-button {
+.button-group {
     position: absolute;
     right: 20px;
     top: 0px;
     z-index: 100;
-    font-size: xx-large;
+    & button {
+        font-size: x-large;
+        margin: 0 5px;
+    }
 }
 tr:not(:hover) {
     button.edit-button {

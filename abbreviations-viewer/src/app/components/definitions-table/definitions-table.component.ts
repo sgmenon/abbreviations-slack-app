@@ -1,5 +1,6 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import { MatInput } from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -26,6 +27,7 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   private viewInitialized = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('input', {read: ElementRef}) filter: ElementRef;
   ngOnInit(): void {
     this.firebaseService.user.subscribe((user) => {
       if (user) {
@@ -34,6 +36,10 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
           this.definitions = new MatTableDataSource(val);
           if (this.viewInitialized) {
             this.configureTableDataSource();
+          }
+          const event = new Event('keyup');
+          if (this.filter) {
+            this.filter.nativeElement.dispatchEvent(event);
           }
         });
       }
@@ -75,6 +81,9 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
             id => console.log(`Added ${id}`));
       }
     });
+  }
+  downloadEntries() {
+    this.definitionsService.downloadCSV(this.definitions.filteredData);
   }
   editEntry(definitionItem: DefinitionItem) {
     const dialogRef = this.dialog.open(

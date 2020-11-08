@@ -35,7 +35,8 @@
             "allowedCommonJsDependencies": [
               "firebase",
               "csv-parse",
-              "@firebase/component"
+              "@firebase/component",
+              "@firebase/util"
             ]
           },
           "configurations": {

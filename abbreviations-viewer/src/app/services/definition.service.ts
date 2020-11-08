@@ -138,4 +138,40 @@ export class DefinitionService {
           });
     });
   }
+
+  async downloadCSV(entries: DefinitionItem[]) {
+    const downloadFilename = `snapshot_${new Date().getTime()}.csv`;
+    const fields = [
+      'abbreviation', 'expansion', 'context', 'description', 'usage',
+      'contributor'
+    ];
+    const getValue = (item: DefinitionItem, fieldName: string) => {
+      if (!item[fieldName]) {
+        return '';
+      }
+      let retVal: string = item[fieldName];
+      if (retVal.search(/\W/)) {
+        retVal = `"${retVal}"`;
+      }
+      return retVal;
+    };
+    let value = fields.join(',');
+    value += '\n';
+    entries.forEach(entry => {
+      const [id, ...data] = entries;
+      value += (fields.map((fieldName: string) => getValue(entry, fieldName)))
+                   .join(',');
+      value += '\n';
+    });
+    const download = (filename, text) => {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    };
+    download(downloadFilename, value);
+  }
 }

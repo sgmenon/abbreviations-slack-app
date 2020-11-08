@@ -9,6 +9,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -38,6 +39,7 @@ import {FirebaseService} from './services/firebase-config.service';
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
+    MatTooltipModule,
     MatToolbarModule,
   ],
   providers: [DefinitionService, FirebaseService],

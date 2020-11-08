@@ -19,9 +19,16 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input />
     </mat-form-field>
 
-    <button mat-mini-fab color="primary" class="add-button" (click)="addNewEntry()">
-        +
-    </button>
+    <div class="button-group">
+        <button mat-mini-fab color="primary" class="add-button" (click)="addNewEntry()"
+            matTooltip="Add an entry" [matTooltipPosition]="'below'">
+            +
+        </button>
+        <button mat-mini-fab color="primary" class="download-button" (click)="downloadEntries()"
+            matTooltip="Download all to a CSV file" [matTooltipPosition]="'below'">
+            <mat-icon>download</mat-icon>
+        </button>
+    </div>
 
     <div class="mat-elevation-z8">
         <table mat-table [dataSource]="definitions" matSort>
