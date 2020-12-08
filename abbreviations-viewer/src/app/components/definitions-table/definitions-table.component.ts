@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import { MatInput } from '@angular/material/input';
+import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -20,9 +20,8 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
       private definitionsService: DefinitionService,
       private dialog: MatDialog) {}
   definitions: MatTableDataSource<DefinitionItem>;
-  displayedColumns: string[] = [
-    'abbreviation', 'expansion', 'description', 'context', 'contributor', 'edit'
-  ];
+  displayedColumns: string[] =
+      ['abbreviation', 'expansion', 'notes', 'context', 'contributor', 'edit'];
   user?: string;
   private viewInitialized = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -101,5 +100,8 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
     await this.firebaseService.signOut();
     this.definitions.data = [];
     this.user = undefined;
+  }
+  stripDomain(val: string) {
+    return val.replace(/@motional.com/gi, '');
   }
 }

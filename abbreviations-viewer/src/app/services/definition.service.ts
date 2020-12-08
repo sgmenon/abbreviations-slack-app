@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import * as csv from 'csvtojson';
 import {Observable} from 'rxjs';
 
 import {FirebaseService} from './firebase-config.service';
@@ -112,33 +111,6 @@ export class DefinitionService {
     });
   }
 
-  uploadCSV(csvFileName: string /*eg. AcronymsSeed*/) {
-    const pathReference =
-        this.firebaseServices.storage.ref(`acronyms/${csvFileName}.csv`);
-    return new Promise((resolve, reject) => {
-      pathReference.getDownloadURL()
-          .then((url) => {
-            const xhr = new XMLHttpRequest();
-            xhr.responseType = 'blob';
-            xhr.onload = (/*event*/) => {
-              const blob: Blob = xhr.response;
-              blob.text().then((value) => {
-                const converter = csv().fromString(value).then((jsonValues) => {
-                  jsonValues.forEach(
-                      jsonValue => this.add(jsonValue as DefinitionItem));
-                  resolve(true);
-                });
-              });
-            };
-            xhr.open('GET', url);
-            xhr.send();
-          })
-          .catch((error) => {
-            reject(error);
-          });
-    });
-  }
-
   async downloadCSV(entries: DefinitionItem[]) {
     const downloadFilename = `snapshot_${new Date().getTime()}.csv`;
     const fields = [
@@ -165,7 +137,8 @@ export class DefinitionService {
     });
     const download = (filename, text) => {
       const element = document.createElement('a');
-      element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute(
+          'href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
       element.setAttribute('download', filename);
       element.style.display = 'none';
       document.body.appendChild(element);
