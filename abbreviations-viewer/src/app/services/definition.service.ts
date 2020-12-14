@@ -19,10 +19,15 @@ export class DefinitionService {
   private unsubscribeOnSnapshotFcn: any;
   private definitionConverter = {
     toFirestore: (data: DefinitionItem) => {
+      let contributorList = new Set();
       const {id, contributor, ...retVal} = data;
+      if (contributor) {
+        contributorList = new Set(contributor.split(',').map(e => e.trim()));
+      }
+      contributorList.add(this.userEmail);
       return {
         ...retVal,
-        contributor: this.userEmail,
+        contributor: [...contributorList].join(', '),
       };
     },
     fromFirestore: (snapshot, options):

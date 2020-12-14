@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {MatDialog} from '@angular/material/dialog';
 import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
@@ -15,10 +16,12 @@ import {EditDefinitionComponent} from '../edit-definition/edit-definition.compon
   styleUrls: ['./definitions-table.component.scss']
 })
 export class DefinitionsTableComponent implements OnInit, AfterViewInit {
+  private idAndContextSet: Set<string> = new Set();
+  private idSet: Set<string> = new Set();
   constructor(
       private firebaseService: FirebaseService,
-      private definitionsService: DefinitionService,
-      private dialog: MatDialog) {}
+      private definitionsService: DefinitionService, private dialog: MatDialog,
+      private snackBar: MatSnackBar) {}
   definitions: MatTableDataSource<DefinitionItem>;
   displayedColumns: string[] =
       ['abbreviation', 'expansion', 'notes', 'context', 'contributor', 'edit'];
@@ -32,6 +35,12 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
       if (user) {
         this.user = user.displayName;
         this.definitionsService.getAll().subscribe((val) => {
+          this.idAndContextSet = new Set();
+          this.idSet = new Set();
+          val.forEach(v => {
+            this.idAndContextSet.add([v.abbreviation, v.context].toString());
+            this.idSet.add(v.abbreviation);
+          });
           this.definitions = new MatTableDataSource(val);
           if (this.viewInitialized) {
             this.configureTableDataSource();
@@ -76,6 +85,27 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: DefinitionItem) => {
       if (result) {
+        const newIdAndContext =
+            [result.abbreviation, result.context].toString();
+        if (this.idAndContextSet.has(newIdAndContext)) {
+          this.snackBar.open(
+              `An abbreviation '${
+                  result.abbreviation}' already exists with context '${
+                  result.context}'.`,
+              'close', {duration: 2000});
+          return;
+        } else if (this.idSet.has(result.abbreviation)) {
+          const snackBarRef = this.snackBar.open(
+              `An abbreviation '${
+                  result.abbreviation}' already exists (with context '${
+                  result.context}').`,
+              'Add anyway', {duration: 2000});
+          snackBarRef.onAction().subscribe(() => {
+            this.definitionsService.add(result).then(
+                id => console.log(`Added ${id}`));
+          });
+          return;
+        }
         this.definitionsService.add(result).then(
             id => console.log(`Added ${id}`));
       }
