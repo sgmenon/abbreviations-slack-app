@@ -23,7 +23,7 @@ export class LoginComponent {
   }
   login() {
     this.firebaseService.authenticate()
-        .then((user: firebase.User) => {
+        .then((user: firebase.default.User) => {
           console.log(`User: ${user.displayName} logged in`);
           this.done();
         })

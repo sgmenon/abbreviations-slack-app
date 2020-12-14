@@ -6,8 +6,9 @@ import 'firebase/analytics';
 import 'firebase/performance';
 
 import {Injectable} from '@angular/core';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import {BehaviorSubject} from 'rxjs';
+import {environment} from 'src/environments/environment';
 
 interface ErrorInfo {
   errorCode: any;
@@ -36,9 +37,7 @@ export class FirebaseService {
   user = new BehaviorSubject<firebase.User|undefined>(undefined);
   credential?: GoogleAuthCredentials;
   errorInfo?: ErrorInfo;
-  get db() {
-    return firebase.firestore();
-  }
+  db: firebase.firestore.Firestore;
   get storage() {
     return firebase.storage();
   }
@@ -54,6 +53,10 @@ export class FirebaseService {
     });
     firebase.analytics();
     firebase.performance();
+    this.db = firebase.firestore();
+    if (environment.production !== true && environment.firestoreDbPort) {
+      this.db.useEmulator('localhost', environment.firestoreDbPort);
+    }
   }
 
   checkLoadedServices() {
