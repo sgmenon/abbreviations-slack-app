@@ -2,7 +2,7 @@
     <span>Motional Abbreviations</span>
     <span class="spacer"></span>
     <ng-container *ngIf="user; else login">
-        <span>Welcome {{user}}</span>
+        <span *ngIf="displayedColumns.length>4">Welcome {{user}}</span>
         <mat-icon class="login-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user
         </mat-icon>
         <button mat-raised-button (click)="signOut()">Sign Out</button>

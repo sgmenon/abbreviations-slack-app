@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MatInput} from '@angular/material/input';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
@@ -21,7 +20,7 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   constructor(
       private firebaseService: FirebaseService,
       private definitionsService: DefinitionService, private dialog: MatDialog,
-      private snackBar: MatSnackBar) {}
+      private snackBar: MatSnackBar, private elementRef: ElementRef) {}
   definitions: MatTableDataSource<DefinitionItem>;
   displayedColumns: string[] =
       ['abbreviation', 'expansion', 'notes', 'context', 'contributor', 'edit'];
@@ -30,6 +29,15 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('input', {read: ElementRef}) filter: ElementRef;
+  private resize() {
+    if (this.elementRef.nativeElement.getBoundingClientRect().width > 600) {
+      this.displayedColumns = [
+        'abbreviation', 'expansion', 'notes', 'context', 'contributor', 'edit'
+      ];
+    } else {
+      this.displayedColumns = ['abbreviation', 'expansion', 'notes', 'edit'];
+    }
+  }
   ngOnInit(): void {
     this.firebaseService.user.subscribe((user) => {
       if (user) {
@@ -62,6 +70,8 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.viewInitialized = true;
     this.configureTableDataSource();
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
