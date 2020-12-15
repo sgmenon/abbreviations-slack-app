@@ -12,7 +12,13 @@ jobs:
             npm install @angular/cli;
             cd abbreviations-viewer;
             npm ci;
+            echo "export const firebaseConfig = { 
+              credential: "$FIREBASE_SERVICE_ACCOUNT", 
+              databaseURL: 'https://sidmenon-playground.firebaseio.com'
+            };"> firebase-config.ts
             ./node_modules/@angular/cli/bin/ng build --prod;
+        env:
+          FIREBASE_SERVICE_ACCOUNT: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SIDMENON_PLAYGROUND }}'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
