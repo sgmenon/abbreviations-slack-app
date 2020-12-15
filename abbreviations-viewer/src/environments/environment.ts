@@ -6,7 +6,9 @@ import {EnvironmentType} from './envTypes';
 
 export const environment: EnvironmentType = {
   production: false,
-  firestoreDbPort: 8080
+  firestoreDbPort: 8080,
+  uploadFromCSVURL:
+      'http://localhost:5001/sidmenon-playground/us-central1/uploadFromCSV'
 };
 
 /*

@@ -1,7 +1,10 @@
+import * as cors from 'cors';
 import * as csv from 'csvtojson';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import * as fs from 'fs';
 
+const corsRequest = cors({origin: true});
 admin.initializeApp();
 const db = admin.firestore();
 const storage = admin.storage();
@@ -57,8 +60,8 @@ const verifyToken = async(request: functions.Request): Promise<boolean> => {
  \
               http://localhost:5001/sidmenon-playground/us-central1/uploadFromCSV/snapshot_1607451754712
  */
-export const uploadFromCSV =
-    functions.https.onRequest(async (request, response) => {
+export const uploadFromCSV = functions.https.onRequest(
+    (request, response) => corsRequest(request, response, async () => {
       try {
         if (!await verifyToken(request)) {
           response.sendStatus(403);
@@ -87,11 +90,12 @@ export const uploadFromCSV =
                 .add(jsonValue as DefinitionItem);
           });
         });
+        fs.unlinkSync(destFilename);
       } catch (error) {
         response.sendStatus(500);
       }
       response.send('Done!');
-    });
+    }));
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript

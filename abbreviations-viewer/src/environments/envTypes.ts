@@ -4,4 +4,5 @@
 export interface EnvironmentType {
   production: boolean;
   firestoreDbPort?: number;
+  uploadFromCSVURL: string;
 }

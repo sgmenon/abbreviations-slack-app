@@ -1,5 +1,8 @@
+import {JsonPipe} from '@angular/common';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
+import {environment} from 'src/environments/environment';
 
 import {FirebaseService} from './firebase-config.service';
 
@@ -38,7 +41,9 @@ export class DefinitionService {
   };
 
 
-  constructor(public firebaseServices: FirebaseService) {
+  constructor(
+      public firebaseServices: FirebaseService,
+      private httpClient: HttpClient) {
     this.firebaseServices.user.subscribe(user => {
       if (user) {
         this.userEmail = user.email;
@@ -151,5 +156,16 @@ export class DefinitionService {
       document.body.removeChild(element);
     };
     download(downloadFilename, value);
+  }
+
+  async uploadCSV(filename: string) {
+    const user = this.firebaseServices.user.getValue();
+    if (user) {
+      const headers =
+          new HttpHeaders({Authorization: `Bearer ${await user.getIdToken()}`});
+      return this.httpClient.post(
+          `${environment.uploadFromCSVURL}/${filename.replace(/\.csv$/gi, '')}`,
+          '', {headers});
+    }
   }
 }

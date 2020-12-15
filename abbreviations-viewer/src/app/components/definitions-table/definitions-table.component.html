@@ -24,9 +24,13 @@
             matTooltip="Add an entry" [matTooltipPosition]="'below'">
             +
         </button>
-        <button mat-mini-fab color="primary" class="download-button" (click)="downloadEntries()"
+        <button *ngIf="adminView" mat-mini-fab color="primary" class="download-button" (click)="downloadEntries()"
             matTooltip="Download all to a CSV file" [matTooltipPosition]="'below'">
             <mat-icon>download</mat-icon>
+        </button>
+        <button *ngIf="adminView" mat-mini-fab color="primary" class="upload-button" (click)="uploadEntries()"
+            matTooltip="Upload from CSV file in the app's storage bucket" [matTooltipPosition]="'below'">
+            <mat-icon>upload</mat-icon>
         </button>
     </div>
 
