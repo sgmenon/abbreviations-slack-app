@@ -6,6 +6,7 @@ import 'firebase/analytics';
 import 'firebase/performance';
 
 import {Injectable} from '@angular/core';
+import {firebaseConfig} from 'firebase-config';
 import firebase from 'firebase/app';
 import {BehaviorSubject} from 'rxjs';
 import {environment} from 'src/environments/environment';
@@ -23,16 +24,6 @@ export type GoogleAuthCredentials =
 
 @Injectable({providedIn: 'root'})
 export class FirebaseService {
-  private readonly firebaseConfig = {
-    apiKey: 'AIzaSyCXZhrrY8YCqHYRikn_zoexzSE_4GF4hc0',
-    authDomain: 'sidmenon-playground.firebaseapp.com',
-    databaseURL: 'https://sidmenon-playground.firebaseio.com',
-    projectId: 'sidmenon-playground',
-    storageBucket: 'sidmenon-playground.appspot.com',
-    messagingSenderId: '651061023794',
-    appId: '1:651061023794:web:cb185286a891456214582b',
-    measurementId: 'G-3HSTYVL8Y7'
-  };
   app: firebase.app.App;
   user = new BehaviorSubject<firebase.User|undefined>(undefined);
   credential?: GoogleAuthCredentials;
@@ -42,7 +33,7 @@ export class FirebaseService {
     return firebase.storage();
   }
   constructor() {
-    this.app = firebase.initializeApp(this.firebaseConfig);
+    this.app = firebase.initializeApp(firebaseConfig);
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.user.next(user);
