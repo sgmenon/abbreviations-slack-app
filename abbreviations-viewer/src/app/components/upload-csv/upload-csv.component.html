@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Upload from a CSV file in the abbreviations storage bucket</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Filename: </mat-label>
+    <input matInput [(ngModel)]="data.filename">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

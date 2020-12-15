@@ -4,10 +4,12 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute} from '@angular/router';
 
 import {DefinitionItem, DefinitionService} from '../../services/definition.service';
 import {FirebaseService} from '../../services/firebase-config.service';
 import {EditDefinitionComponent} from '../edit-definition/edit-definition.component';
+import {UploadCsvComponent} from '../upload-csv/upload-csv.component';
 
 @Component({
   selector: 'app-definitions-table',
@@ -17,10 +19,7 @@ import {EditDefinitionComponent} from '../edit-definition/edit-definition.compon
 export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   private idAndContextSet: Set<string> = new Set();
   private idSet: Set<string> = new Set();
-  constructor(
-      private firebaseService: FirebaseService,
-      private definitionsService: DefinitionService, private dialog: MatDialog,
-      private snackBar: MatSnackBar, private elementRef: ElementRef) {}
+  adminView = false;
   definitions: MatTableDataSource<DefinitionItem>;
   displayedColumns: string[] =
       ['abbreviation', 'expansion', 'notes', 'context', 'contributor', 'edit'];
@@ -29,6 +28,16 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('input', {read: ElementRef}) filter: ElementRef;
+
+  constructor(
+      private firebaseService: FirebaseService,
+      private definitionsService: DefinitionService, private dialog: MatDialog,
+      private snackBar: MatSnackBar, private elementRef: ElementRef,
+      private route: ActivatedRoute) {
+    this.route.queryParams.subscribe(params => {
+      this.adminView = params.admin;
+    });
+  }
   private resize() {
     if (this.elementRef.nativeElement.getBoundingClientRect().width > 600) {
       this.displayedColumns = [
@@ -118,6 +127,20 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
         }
         this.definitionsService.add(result).then(
             id => console.log(`Added ${id}`));
+      }
+    });
+  }
+  uploadEntries() {
+    const dialogRef = this.dialog.open(
+        UploadCsvComponent, {width: '350px', data: {filename: ''}});
+
+    dialogRef.afterClosed().subscribe((result: {filename: string}) => {
+      if (result) {
+        this.definitionsService.uploadCSV(result.filename)
+            .then(
+                (postResult) => postResult.subscribe(
+                    code => console.log('success ' + JSON.stringify(code))),
+                (reason) => console.log('failure: ' + reason));
       }
     });
   }
