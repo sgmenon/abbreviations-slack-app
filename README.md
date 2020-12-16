@@ -41,3 +41,13 @@ If you just started the emulator, there won't be any data. To seed this with rea
 
 1. Visit `http://localhost:4200/main?admin=1`
 1. Click the upload button and you can use the snapshot: `snapshot_1607451754712.csv`.
+
+## 4. Deploying the app
+
+Firebase hosting is deployment is done automatically when PRs are merged.
+
+Manual deployment (and deployment of functions, storage rules etc.) may be done if you have required permissions, using the following command:
+
+```sh
+firebase deploy
+```
