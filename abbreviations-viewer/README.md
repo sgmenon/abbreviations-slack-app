@@ -2,28 +2,6 @@
 
 A website for viewing and editing a list of abbreviations used in an organization.
 
-## Before starting
-
-At the level of this README.md file (ie. `abbreviations-viewer`), create a file named `firebase-config.ts`.
-
-[Obtain the Firebase config object](https://support.google.com/firebase/answer/7015592) for your firebase project, and use that file to populate an exported constant named `firebaseConfig` in this typescript file.
-
-The file should look like this:
-
-```ts
-/** Firebase config needed for accessing the firebase app */
-export const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://PROJECT_ID.firebaseio.com",
-  projectId: "PROJECT_ID",
-  storageBucket: "PROJECT_ID.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID",
-  measurementId: "G-MEASUREMENT_ID",
-};
-```
-
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
