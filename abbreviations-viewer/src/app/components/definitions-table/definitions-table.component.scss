@@ -10,6 +10,7 @@
 }
 table {
     width: 100%;
+    white-space: pre-wrap;
     & .mat-cell.no-data {
         text-align: center;
     }

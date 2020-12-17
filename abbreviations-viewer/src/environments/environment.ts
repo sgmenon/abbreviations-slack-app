@@ -2,13 +2,19 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import {firebaseConfig} from 'firebase-config';
 import {EnvironmentType} from './envTypes';
 
 export const environment: EnvironmentType = {
   production: false,
   firestoreDbPort: 8080,
   uploadFromCSVURL:
-      'http://localhost:5001/sidmenon-playground/us-central1/uploadFromCSV'
+      'http://localhost:5001/sidmenon-playground/us-central1/uploadFromCSV',
+  getFirebaseConfig: () => {
+    return new Promise((resolve) => {
+      resolve(firebaseConfig);
+    });
+  }
 };
 
 /*

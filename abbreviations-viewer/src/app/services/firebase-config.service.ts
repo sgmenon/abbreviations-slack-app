@@ -6,7 +6,6 @@ import 'firebase/analytics';
 import 'firebase/performance';
 
 import {Injectable} from '@angular/core';
-import {firebaseConfig} from 'firebase-config';
 import firebase from 'firebase/app';
 import {BehaviorSubject} from 'rxjs';
 import {environment} from 'src/environments/environment';
@@ -33,26 +32,27 @@ export class FirebaseService {
     return firebase.storage();
   }
   constructor() {
-    this.app = firebase.initializeApp(firebaseConfig);
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.user.next(user);
-      } else {
-        this.user.next(undefined);
-        this.credential = undefined;
+    environment.getFirebaseConfig().then(firebaseConfig => {
+      this.app = firebase.initializeApp(firebaseConfig);
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.user.next(user);
+        } else {
+          this.user.next(undefined);
+          this.credential = undefined;
+        }
+      });
+      firebase.analytics();
+      firebase.performance();
+      this.db = firebase.firestore();
+      if (environment.production !== true && environment.firestoreDbPort) {
+        this.db.useEmulator('localhost', environment.firestoreDbPort);
       }
     });
-    firebase.analytics();
-    firebase.performance();
-    this.db = firebase.firestore();
-    if (environment.production !== true && environment.firestoreDbPort) {
-      this.db.useEmulator('localhost', environment.firestoreDbPort);
-    }
   }
 
   checkLoadedServices() {
     try {
-      const app = this.app;
       const features = [
         'auth',
         'firestore',
@@ -61,7 +61,7 @@ export class FirebaseService {
         'analytics',
         'remoteConfig',
         'performance',
-      ].filter(feature => typeof app[feature] === 'function');
+      ].filter(feature => typeof this.app[feature] === 'function');
       console.log(`Firebase SDK loaded with ${features.join(', ')}`);
     } catch (e) {
       console.error(e);
@@ -71,6 +71,10 @@ export class FirebaseService {
 
   authenticate() {
     return new Promise((resolve, reject) => {
+      if (!this.app) {
+        reject('App not initialized');
+        return;
+      }
       const provider = new firebase.auth.GoogleAuthProvider();
       provider.setCustomParameters({hd: 'motional.com'});
       firebase.auth()

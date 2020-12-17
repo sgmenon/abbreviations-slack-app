@@ -140,7 +140,8 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
             .then(
                 (postResult) => postResult.subscribe(
                     code => console.log('success ' + JSON.stringify(code))),
-                (reason) => console.log('failure: ' + reason));
+                (reason) => console.log('failure: ' + reason))
+            .catch((err) => console.log(err));
       }
     });
   }
@@ -165,6 +166,15 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
     this.user = undefined;
   }
   stripDomain(val: string) {
+    if (!val) {
+      return '';
+    }
     return val.replace(/@motional.com/gi, '');
+  }
+  makeLinksClickable(val: string) {
+    if (!val) {
+      return '';
+    }
+    return val.replace(/(https?:\/\/[^\s]+)/g, '<a href=\'$1\'>$1</a>');
   }
 }
