@@ -10,7 +10,10 @@
 }
 table {
     width: 100%;
-    white-space: pre-wrap;
+    & td {
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
     & .mat-cell.no-data {
         text-align: center;
     }
