@@ -94,7 +94,7 @@ export const uploadFromCSV = functions.https.onRequest(
       } catch (error) {
         response.sendStatus(500);
       }
-      response.send('Done!');
+      response.send(JSON.stringify('Done!'));
     }));
 
 // // Start writing Firebase Functions

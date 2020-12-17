@@ -13,20 +13,9 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
             npm install @angular/cli --save-dev;
-            npm install firebase-admin --save;
             cd abbreviations-viewer;
             npm ci;
-            echo $FIREBASE_SERVICE_ACCOUNT > ~/credentials.json
-            echo "
-            import * as admin from 'firebase-admin'
-            export const firebaseConfig = { 
-              credential: admin.credential.applicationDefault(), 
-              databaseURL: 'https://sidmenon-playground.firebaseio.com'
-            };"> firebase-config.ts
             ./node_modules/@angular/cli/bin/ng build --prod;
-        env:
-          FIREBASE_SERVICE_ACCOUNT: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SIDMENON_PLAYGROUND }}'
-          GOOGLE_APPLICATION_CREDENTIALS: '~/credentials.json'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
