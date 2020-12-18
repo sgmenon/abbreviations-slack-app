@@ -1,7 +1,7 @@
 # Abbreviations Viewer
 Slack app and Web GUI for expanding abbreviations used within an organization
 
-Web App deployed at : motional-whatis.web.app (currently restricted to users with verified @motional.com email IDs) 
+Web App deployed at : [motional-whatis.web.app](https://motional-whatis.web.app) (currently restricted to users with verified @motional.com email IDs) 
 
 The slack app is still under development.
 
