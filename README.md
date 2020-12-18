@@ -5,6 +5,8 @@ Web App deployed at : [motional-whatis.web.app](https://motional-whatis.web.app)
 
 The slack app is still under development.
 
+Others are welcome to adapting this code base to their own firebase projects (just be sure to change all references to the firebase project, for example, in firebase.json).
+
 ## 1. Start emulator
 
 For debugging:
