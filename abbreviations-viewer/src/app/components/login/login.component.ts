@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {last} from 'rxjs/operators';
 
@@ -11,7 +12,8 @@ import {FirebaseService} from '../../services/firebase-config.service';
 })
 export class LoginComponent {
   constructor(
-      private firebaseService: FirebaseService, private router: Router) {
+      private firebaseService: FirebaseService, private router: Router,
+      private snackBar: MatSnackBar) {
     firebaseService.user.pipe(last()).subscribe((user) => {
       if (user) {
         this.done();
@@ -27,6 +29,8 @@ export class LoginComponent {
           console.log(`User: ${user.displayName} logged in`);
           this.done();
         })
-        .catch(e => console.warn(e));
+        .catch(
+            e => this.snackBar.open(
+                `login failure: ${e.errorMessage}`, 'dismiss'));
   }
 }
