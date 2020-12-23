@@ -6,6 +6,17 @@ import {environment} from 'src/environments/environment';
 
 import {FirebaseService} from './firebase-config.service';
 
+const ABBREVIATIONS_COLLECTION = 'abbreviations_v0';
+
+interface DefinitionItemInFirestore {
+  abbreviationLowerCase: string;
+  abbreviation: string;
+  expansion: string;
+  context?: string;
+  description?: string;
+  usage?: string;
+  contributor: string;
+}
 export interface DefinitionItem {
   id: string;
   abbreviation: string;
@@ -30,14 +41,19 @@ export class DefinitionService {
       contributorList.add(this.userEmail);
       return {
         ...retVal,
+        abbreviationLowerCase:
+            data.abbreviation.toLowerCase().toUpperCase().toLowerCase(),
         contributor: [...contributorList].join(', '),
       };
     },
-    fromFirestore: (snapshot, options):
-        DefinitionItem => {
-          const data = snapshot.data(options);
-          return {...data, id: snapshot.id};
-        }
+    fromFirestore:
+        (snapshot: firebase.default.firestore.QueryDocumentSnapshot,
+         options: firebase.default.firestore.SnapshotOptions):
+            DefinitionItem => {
+              const {abbreviationLowerCase, ...data} =
+                  snapshot.data(options) as DefinitionItemInFirestore;
+              return {...data, id: snapshot.id};
+            }
   };
 
 
@@ -59,7 +75,7 @@ export class DefinitionService {
 
   add(item: DefinitionItem) {
     return new Promise((resolve, reject) => {
-      this.firebaseServices.db.collection('entries')
+      this.firebaseServices.db.collection(ABBREVIATIONS_COLLECTION)
           .withConverter(this.definitionConverter)
           .add(item)
           .then((docRef) => {
@@ -73,7 +89,7 @@ export class DefinitionService {
 
   update(item: DefinitionItem) {
     return new Promise((resolve, reject) => {
-      this.firebaseServices.db.collection('entries')
+      this.firebaseServices.db.collection(ABBREVIATIONS_COLLECTION)
           .doc(item.id)
           .withConverter(this.definitionConverter)
           .update(item)
@@ -89,7 +105,7 @@ export class DefinitionService {
   find(name: string): Promise<DefinitionItem[]> {
     return new Promise<DefinitionItem[]>((resolve) => {
       const retVal: DefinitionItem[] = [];
-      this.firebaseServices.db.collection('entries')
+      this.firebaseServices.db.collection(ABBREVIATIONS_COLLECTION)
           .withConverter(this.definitionConverter)
           .where('abbreviation', '==', name)
           .get()
@@ -107,7 +123,7 @@ export class DefinitionService {
   getAll(): Observable<DefinitionItem[]> {
     return new Observable<DefinitionItem[]>(subscriber => {
       this.unsubscribeOnSnapshotFcn =
-          this.firebaseServices.db.collection('entries')
+          this.firebaseServices.db.collection(ABBREVIATIONS_COLLECTION)
               .withConverter(this.definitionConverter)
               .onSnapshot(querySnapshots => {
                 const retVal: DefinitionItem[] = [];

@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /entries/{document=**} {
+    match /{allEntries}/{document=**} {
       allow read, write: if request.auth != null && 
                          request.auth.token.email_verified == true && 
                          request.auth.token.email.matches('.*@motional.com$');
