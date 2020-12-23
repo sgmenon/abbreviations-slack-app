@@ -163,67 +163,71 @@ export const slackWhatIsRequest = functions.https.onRequest(
 
 export const whatIs = functions.pubsub.topic('whatis').onPublish(
     async (message, pubSubContext) => {
-      const {text, channel_id, user_id} = message.json;
-      const queryResult =
-          await db.collection(ABBREVIATIONS_COLLECTION)
-              .where(
-                  'abbreviationLowerCase', '==',
-                  (text.toLowerCase().toUpperCase().toLowerCase() as string)
-                      .trim())
-              .get();
-      let resultString = '';
-      let expansion = '';
-      if (queryResult.size === 0) {
-        resultString = `No abbreviation was found for '${
-            (text as string)
-                .trim()}'.\nWhen you find out what it stands for considering adding it to our list by visiting <https://motional-whatis.web.app>`
-      } else {
-        queryResult.docs.forEach(doc => {
-          const abbreviation = doc.get('abbreviation');
-          if (abbreviation) {
-            expansion = doc.get('expansion');
-            let description: string = doc.get('description')
-            if (description) {
-              description = `Description: ${description} \n`;
+      try {
+        const {text, channel_id, user_id} = message.json;
+        const queryResult =
+            await db.collection(ABBREVIATIONS_COLLECTION)
+                .where(
+                    'abbreviationLowerCase', '==',
+                    (text.toLowerCase().toUpperCase().toLowerCase() as string)
+                        .trim())
+                .get();
+        let resultString = '';
+        let expansion = '';
+        if (queryResult.size === 0) {
+          resultString = `No abbreviation was found for '${
+              (text as string)
+                  .trim()}'.\nWhen you find out what it stands for considering adding it to our list by visiting <https://motional-whatis.web.app>`
+        } else {
+          queryResult.docs.forEach(doc => {
+            const abbreviation = doc.get('abbreviation');
+            if (abbreviation) {
+              expansion = doc.get('expansion');
+              let description: string = doc.get('description')
+              if (description) {
+                description = `Description: ${description} \n`;
+              }
+              let contributor: string = doc.get('contributor')
+              if (contributor) {
+                contributor = `Contributed by _${contributor}_ \n`;
+              }
+              let context: string = doc.get('context')
+              if (context) {
+                context = `Context: ${context} \n`;
+              }
+              resultString += `*${abbreviation}*: ${expansion}\n ${
+                  context + description + contributor}`;
             }
-            let contributor: string = doc.get('contributor')
-            if (contributor) {
-              contributor = `Contributed by _${contributor}_ \n`;
-            }
-            let context: string = doc.get('context')
-            if (context) {
-              context = `Context: ${context} \n`;
-            }
-            resultString += `*${abbreviation}*: ${expansion}\n ${
-                context + description + contributor}`;
-          }
-        });
+          });
+        }
+        const conversationInfo = await bot.conversations.open(
+            {token: functions.config().slack.bot_token, users: user_id});
+        let finalChannelId = channel_id;
+        if (conversationInfo && conversationInfo.ok) {
+          finalChannelId = (conversationInfo as any).channel.id;
+        }
+        bot.chat
+            .postMessage({
+              token: functions.config().slack.bot_token,
+              attachments: [],
+              text: expansion,
+              blocks: [{
+                'type': 'section',
+                'text': {'type': 'mrkdwn', 'text': resultString}
+              }],
+              channel: finalChannelId,
+              user: user_id,
+              username: 'Motional What-Is',
+              icon_emoji: ':go_motional:'
+            })
+            .then(
+                (status) => {
+                  functions.logger.info(status);
+                },
+                (error) => {
+                  functions.logger.info('chat.postMessage failed!', error);
+                });
+      } catch (error) {
+        functions.logger.info('Unexpected hard error!', error);
       }
-      const conversationInfo = await bot.conversations.open(
-          {token: functions.config().slack.bot_token, users: user_id});
-      let finalChannelId = channel_id;
-      if (conversationInfo) {
-        finalChannelId = (conversationInfo as any).channel.id;
-      }
-      bot.chat
-          .postEphemeral({
-            token: functions.config().slack.bot_token,
-            attachments: [],
-            text: expansion,
-            blocks: [{
-              'type': 'section',
-              'text': {'type': 'mrkdwn', 'text': resultString}
-            }],
-            channel: finalChannelId,
-            user: user_id,
-            username: 'Motional What-Is',
-            icon_emoji: ':go_motional:'
-          })
-          .then(
-              (status) => {
-                functions.logger.info(status);
-              },
-              (error) => {
-                functions.logger.info('Failure!', error);
-              });
     });
