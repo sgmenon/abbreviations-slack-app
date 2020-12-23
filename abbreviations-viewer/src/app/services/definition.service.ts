@@ -1,4 +1,3 @@
-import {JsonPipe} from '@angular/common';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
@@ -91,8 +90,7 @@ export class DefinitionService {
     return new Promise((resolve, reject) => {
       this.firebaseServices.db.collection(ABBREVIATIONS_COLLECTION)
           .doc(item.id)
-          .withConverter(this.definitionConverter)
-          .update(item)
+          .update(this.definitionConverter.toFirestore(item))
           .then(() => {
             resolve(item.id);
           })

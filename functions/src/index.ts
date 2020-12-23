@@ -187,13 +187,22 @@ export const whatIs = functions.pubsub.topic('whatis').onPublish(
               if (description) {
                 description = `Description: ${description} \n`;
               }
+              else {
+                description = '';
+              }
               let contributor: string = doc.get('contributor')
               if (contributor) {
                 contributor = `Contributed by _${contributor}_ \n`;
               }
+              else {
+                contributor = '';
+              }
               let context: string = doc.get('context')
               if (context) {
                 context = `Context: ${context} \n`;
+              }
+              else {
+                context = '';
               }
               resultString += `*${abbreviation}*: ${expansion}\n ${
                   context + description + contributor}`;
