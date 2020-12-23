@@ -146,7 +146,9 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
     });
   }
   downloadEntries() {
-    this.definitionsService.downloadCSV(this.definitions.filteredData);
+    if (this.definitions) {
+      this.definitionsService.downloadCSV(this.definitions.filteredData);
+    }
   }
   editEntry(definitionItem: DefinitionItem) {
     const dialogRef = this.dialog.open(

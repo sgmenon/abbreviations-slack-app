@@ -14,11 +14,14 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@google-cloud/pubsub": "^2.7.0",
+    "@slack/web-api": "^5.14.0",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
     "firebase-admin": "^9.2.0",
     "firebase-functions": "^3.11.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "qs": "^6.7.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.9",
