@@ -92,4 +92,5 @@ Install this newly created app to your Slack workspace, and be sure to set the f
 ```sh
 firebase functions:config:set slack.signing_secret=<app-signing-secret> slack.app_id=<your_app_id> slack.bot_token=<bot-oauth-token>
 ```
-Test it out!
+
+Redeploy functions (`firebase deploy --only functions`), and test it out on your slack workspace!
