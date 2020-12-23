@@ -1,9 +1,8 @@
-# Abbreviations Viewer
+# Abbreviations Viewer & Slack App
 Slack app and Web GUI for expanding abbreviations used within an organization
 
 Web App deployed at : [motional-whatis.web.app](https://motional-whatis.web.app) (currently restricted to users with verified @motional.com email IDs) 
 
-The slack app is still under development.
 
 Others are welcome to adapting this code base to their own firebase projects (just be sure to change all references to the firebase project, for example, in firebase.json).
 
@@ -21,7 +20,7 @@ Without debugging needs:
 firebase emulators:start --inspect-functions
 ```
 
-## 2. Viewing the app with the live Firestore db
+## 2. Viewing the website with the live Firestore db
 
 ```sh
 firebase serve
@@ -30,7 +29,7 @@ firebase serve
 Now visit `localhost:5000`
 
 
-## 3. Viewing the app with the emulated Firestore db
+## 3. Viewing the website with the emulated Firestore db
 
 ### 3.1 Create credentials for serving locally without `firebase serve`
 
@@ -81,3 +80,16 @@ Manual deployment (and deployment of functions, storage rules etc.) may be done 
 ```sh
 firebase deploy
 ```
+
+## 5. Slack integration
+
+Create a slack app, with a slash command that points to the URL of the cloud function "slackWhatIsRequest".
+
+Make sure to have the following oauth scopes `chat:write`, `chat:write.customize`, `commands` and `im:write`.
+
+Install this newly created app to your Slack workspace, and be sure to set the following firebase:config options
+
+```sh
+firebase functions:config:set slack.signing_secret=<app-signing-secret> slack.app_id=<your_app_id> slack.bot_token=<bot-oauth-token>
+```
+Test it out!
