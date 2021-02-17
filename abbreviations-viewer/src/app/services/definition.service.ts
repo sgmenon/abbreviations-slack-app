@@ -146,6 +146,7 @@ export class DefinitionService {
         return '';
       }
       let retVal: string = item[fieldName];
+      retVal = retVal.replace(/\"/g, '""');
       if (retVal.search(/\W/)) {
         retVal = `"${retVal}"`;
       }
