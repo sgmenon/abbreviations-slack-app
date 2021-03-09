@@ -20,6 +20,7 @@ import {AppComponent} from './components/app.component';
 import {DefinitionsTableComponent} from './components/definitions-table/definitions-table.component';
 import {EditDefinitionComponent} from './components/edit-definition/edit-definition.component';
 import {LoginComponent} from './components/login/login.component';
+import {PromotionalBannerComponent} from './components/promotional-banner/promotional-banner.component';
 import {UploadCsvComponent} from './components/upload-csv/upload-csv.component';
 import {DefinitionService} from './services/definition.service';
 import {FirebaseService} from './services/firebase-config.service';
@@ -27,7 +28,7 @@ import {FirebaseService} from './services/firebase-config.service';
 @NgModule({
   declarations: [
     AppComponent, LoginComponent, DefinitionsTableComponent,
-    EditDefinitionComponent, UploadCsvComponent
+    EditDefinitionComponent, UploadCsvComponent, PromotionalBannerComponent
   ],
   imports: [
     AppRoutingModule,
