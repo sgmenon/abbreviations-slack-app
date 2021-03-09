@@ -1,0 +1,7 @@
+<mat-toolbar color="accent" *ngIf="!dismissed" >
+    <span [innerHTML]="promotionalText"></span>
+    <span class="spacer"></span>
+    <button class="dismiss" mat-icon-button aria-label="Dismiss" (click)="dismissed=true" color="primary">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
