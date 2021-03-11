@@ -179,8 +179,9 @@ export const whatIs = functions.pubsub.topic('whatis').onPublish(
               (text as string)
                   .trim()}'.\nWhen you find out what it stands for considering adding it to our list by visiting <https://motional-whatis.web.app>`
         } else {
-          queryResult.docs.forEach(doc => {
+          queryResult.docs.forEach((doc, idx) => {
             const abbreviation = doc.get('abbreviation');
+            const nl = idx > 0 ? '\n' : '';
             if (abbreviation) {
               expansion = doc.get('expansion');
               let description: string = doc.get('description')
@@ -204,7 +205,7 @@ export const whatIs = functions.pubsub.topic('whatis').onPublish(
               else {
                 context = '';
               }
-              resultString += `*${abbreviation}*: ${expansion}\n ${
+              resultString += `${nl}*${abbreviation}*: ${expansion}\n${
                   context + description + contributor}`;
             }
           });

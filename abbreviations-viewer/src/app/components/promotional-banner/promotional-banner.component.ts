@@ -8,6 +8,6 @@ import {Component} from '@angular/core';
 export class PromotionalBannerComponent {
   constructor() {}
   promotionalText =
-      'Have you tried Motional-Whatis slackbot? Try asking Slack <span class="code">"/whatis AV"</span>';
+      'Have you tried the Motional-Whatis slackbot? Try asking Slack <span class="code">"/whatis AV"</span>';
   dismissed = false;
 }

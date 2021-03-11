@@ -110,15 +110,15 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
           this.snackBar.open(
               `An abbreviation '${
                   result.abbreviation}' already exists with context '${
-                  result.context}'.`,
-              'close', {duration: 2000});
+                  result.context ? result.context : ''}'.`,
+              'close', {duration: 10000});
           return;
         } else if (this.idSet.has(result.abbreviation)) {
           const snackBarRef = this.snackBar.open(
               `An abbreviation '${
                   result.abbreviation}' already exists (with context '${
-                  result.context}').`,
-              'Add anyway', {duration: 2000});
+                  result.context ? result.context : ''}').`,
+              'Add anyway', {duration: 10000});
           snackBarRef.onAction().subscribe(() => {
             this.definitionsService.add(result).then(
                 id => console.log(`Added ${id}`));
