@@ -15,7 +15,7 @@ const storage = admin.storage();
 const ADMIN = 'siddharth.menon@motional.com';
 const bot = new WebClient(functions.config().slack.token);
 const pubsubClient = new PubSub();
-const ABBREVIATIONS_COLLECTION = 'abbreviations_v0';
+const ABBREVIATIONS_COLLECTION = 'abbreviations_v1';
 
 interface DefinitionItem {
   abbreviationLowerCase: string;
@@ -120,8 +120,17 @@ export const uploadFromCSV = functions.https.onRequest(
                       .toUpperCase()
                       .toLowerCase();
             }
-            await db.collection(collectionName)
-                .add(jsonValue as DefinitionItem);
+
+            const queryResult =
+                await db.collection(ABBREVIATIONS_COLLECTION)
+                    .where(
+                        'abbreviationLowerCase', '==',
+                        (jsonValue as DefinitionItem).abbreviationLowerCase)
+                    .get();
+            if (queryResult.empty) {
+              await db.collection(collectionName)
+                  .add(jsonValue as DefinitionItem);
+            }
           });
         });
         response.send(JSON.stringify('Done!'));

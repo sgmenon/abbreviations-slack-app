@@ -5,7 +5,7 @@ import {environment} from 'src/environments/environment';
 
 import {FirebaseService} from './firebase-config.service';
 
-const ABBREVIATIONS_COLLECTION = 'abbreviations_v0';
+const ABBREVIATIONS_COLLECTION = 'abbreviations_v1';
 
 interface DefinitionItemInFirestore {
   abbreviationLowerCase: string;
