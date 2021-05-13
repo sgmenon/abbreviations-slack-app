@@ -19,6 +19,11 @@ import {UploadCsvComponent} from '../upload-csv/upload-csv.component';
 export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   private idAndContextSet: Set<string> = new Set();
   private idSet: Set<string> = new Set();
+  private defaultFilterPredicate:
+      ((data: DefinitionItem, filter: string) => boolean);
+  private filterFields: {abb?: string, ctx?: string, contrib?: string};
+  filterLabel =
+      'Filter (eg. "AV", "abb:av", "ctx:motional DOG", "ctx:mcu Aurix abb:D" etc.)';
   adminView = false;
   definitions: MatTableDataSource<DefinitionItem>;
   displayedColumns: string[] =
@@ -66,6 +71,26 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
           if (this.filter) {
             this.filter.nativeElement.dispatchEvent(event);
           }
+          this.defaultFilterPredicate =
+              this.definitions.filterPredicate.bind({});
+          this.definitions.filterPredicate = (data, filter: string) => {
+            if (this.filterFields.abb &&
+                data.abbreviation.toLowerCase().search(this.filterFields.abb) <
+                    0) {
+              return false;
+            }
+            if (this.filterFields.contrib &&
+                data.contributor.toLowerCase().search(
+                    this.filterFields.contrib) < 0) {
+              return false;
+            }
+            if (this.filterFields.ctx &&
+                data.context.toLowerCase().search(this.filterFields.ctx) < 0) {
+              return false;
+            }
+            filter = filter.replace(/(\w+)\:(\w+)/g, '');
+            return this.defaultFilterPredicate(data, filter.trim());
+          };
         });
       }
     });
@@ -84,8 +109,31 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+    const knownTokens = ['abb', 'ctx', 'contrib'];
+
     if (this.definitions) {
-      this.definitions.filter = filterValue.trim().toLowerCase();
+      const lowerFilterStr = filterValue.trim().toLowerCase();
+      this.filterFields = {};
+      const tokens = lowerFilterStr.match(/(\w+)\:(\w+)/g);
+      if (tokens) {
+        tokens.forEach(tok => {
+          const matches = tok.match(/(\w+)\:(\w+)/);
+          if (knownTokens.includes(matches[1])) {
+            switch (matches[1]) {
+              case 'abb':
+                this.filterFields.abb = matches[2];
+                break;
+              case 'ctx':
+                this.filterFields.ctx = matches[2];
+                break;
+              case 'contrib':
+                this.filterFields.contrib = matches[2];
+                break;
+            }
+          }
+        });
+      }
+      this.definitions.filter = lowerFilterStr;
 
       if (this.definitions.paginator) {
         this.definitions.paginator.firstPage();

@@ -16,7 +16,7 @@
 <div class="table-wrapper" *ngIf="user; else logInPrompt">
 
     <mat-form-field>
-        <mat-label>Filter</mat-label>
+        <mat-label>{{filterLabel}}</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input />
     </mat-form-field>
 
