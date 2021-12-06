@@ -6,7 +6,21 @@ Web App deployed at : [motional-whatis.web.app](https://motional-whatis.web.app)
 
 Others are welcome to adapting this code base to their own firebase projects (just be sure to change all references to the firebase project, for example, in firebase.json).
 
+## 0. One time Setup
+
+Download:
+- Node Js, perferably using [NVM](https://github.com/nvm-sh/nvm#installing-and-updating)
+- install the firebase-tools package. (eg. `npm install -g firebase-tools`)
+- install the angular-cli package. (eg. `npm install -g @angular/cli`)
+
 ## 1. Start emulator
+
+Setup for functions
+
+```sh
+firebase login
+firebase functions:config:get > funcions/.runtimeconfig.json
+```
 
 For debugging:
 
@@ -14,10 +28,12 @@ For debugging:
 firebase emulators:start --inspect-functions
 ```
 
+Debug following [these instructions](https://nodejs.org/en/docs/guides/debugging-getting-started/)
+
 Without debugging needs:
 
 ```sh
-firebase emulators:start --inspect-functions
+firebase emulators:start
 ```
 
 ## 2. Viewing the website with the live Firestore db

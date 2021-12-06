@@ -6,6 +6,8 @@ import * as csv from 'csvtojson';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 import * as qs from 'qs';
 
 const corsRequest = cors({origin: true});
@@ -91,7 +93,7 @@ const verifyAdminToken =
  */
 export const uploadFromCSV = functions.https.onRequest(
     (request, response) => corsRequest(request, response, async () => {
-      const destFilename = '/tmp/tmpDownload.csv';
+      const destFilename = path.join(os.tmpdir(), 'tmpDownload.csv');
       try {
         if (!await verifyAdminToken(request)) {
           response.status(403).send('User not authorized to make this request');
@@ -104,12 +106,16 @@ export const uploadFromCSV = functions.https.onRequest(
         }
         const pathReference =
             storage.bucket().file(`acronyms${csvFileName}.csv`);
-        if (!pathReference.exists()) {
+        const fileExists = await pathReference.exists();
+        if (!fileExists[0]) {
           response.status(404).send(JSON.stringify(`A file named '${
               csvFileName}.csv' was not found in this app's default storage bucket.`));
           return;
         }
-        const options = {destination: destFilename};
+        const options = {
+          destination: destFilename,
+          validation: !process.env.FUNCTIONS_EMULATOR
+        };
         await pathReference.download(options);
         await csv().fromFile(destFilename).then((jsonValues) => {
           jsonValues.forEach(async jsonValue => {

@@ -14,6 +14,12 @@
 chrome-profiler-events*.json
 speed-measure-plugin*.json
 
+# Firebase config
+firebase-config.ts
+
+# Angular cache
+.angular
+
 # IDEs and editors
 /.idea
 .project
