@@ -84,8 +84,10 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
                     this.filterFields.contrib) < 0) {
               return false;
             }
-            if (this.filterFields.ctx && data.context &&
-                data.context.toLowerCase().search(this.filterFields.ctx) < 0) {
+            if (this.filterFields.ctx &&
+                (data.context ?
+                     data.context.toLowerCase().search(this.filterFields.ctx) :
+                     -1) < 0) {
               return false;
             }
             filter = filter.replace(/(\w+)\:(\w+)/g, '');
