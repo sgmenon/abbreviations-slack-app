@@ -36,18 +36,15 @@ Without debugging needs:
 firebase emulators:start
 ```
 
-## 2. Viewing the website with the live Firestore db
+Starting emulators starts the firebase hosting emulator. However authentication will likely fail if the GCP project's API key for Firebase is restricted to authentication requests from a subset of domains (which is how the API keys in `sidmenon-playground` is setup).
 
-```sh
-firebase serve
-```
+To facilitate authentication in `localhost`, you should use a different API key. To do that use the workflow in the next section.
 
-Now visit `localhost:5000`
+We have not yet hooked up authentication emulation which would have been the better way of doing auth locallay.
 
+## 2. Viewing the website with the emulated Firestore db
 
-## 3. Viewing the website with the emulated Firestore db
-
-### 3.1 Create credentials for serving locally without `firebase serve`
+### 2.1 Create credentials for serving locally
 
 
 In the sub-folder `abbreviations-viewer`, create a file named `firebase-config.ts`.
@@ -70,7 +67,7 @@ export const firebaseConfig = {
 };
 ```
 
-### 3.2 Start a local, debug-able front-end Angular application
+### 2.2 Start a local, debug-able front-end Angular application
 
 Run the steps in section `1`. Then run:
 
@@ -79,7 +76,7 @@ cd abbreviations-viewer
 ng serve
 ```
 
-Now visit `localhost:4200`
+Now visit `localhost:4200`.
 
 
 If you just started the emulator, there won't be any data. To seed this with real data (using the December 2020 snapshot of the app) do this:
@@ -87,7 +84,7 @@ If you just started the emulator, there won't be any data. To seed this with rea
 1. Visit `http://localhost:4200/main?admin=1`
 1. Click the upload button use the snapshot: `snapshot_1607451754712.csv`. Then hit "Ok".
 
-## 4. Deploying the app
+## 3. Deploying the app
 
 Firebase hosting is deployment is done automatically when PRs are merged.
 
