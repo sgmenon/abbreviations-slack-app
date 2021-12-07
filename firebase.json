@@ -6,7 +6,7 @@
   "hosting": {
     "site": "motional-whatis",
     "public": "abbreviations-viewer/dist/abbreviations-viewer",
-    "predeploy": "cd abbreviations-viewer && ng build --prod",
+    "predeploy": "cd abbreviations-viewer && ng build --configuration production",
     "ignore": [
       "firebase.json",
       "**/.*",

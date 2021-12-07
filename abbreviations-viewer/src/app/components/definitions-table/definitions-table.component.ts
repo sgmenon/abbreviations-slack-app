@@ -84,7 +84,7 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
                     this.filterFields.contrib) < 0) {
               return false;
             }
-            if (this.filterFields.ctx &&
+            if (this.filterFields.ctx && data.context &&
                 data.context.toLowerCase().search(this.filterFields.ctx) < 0) {
               return false;
             }
