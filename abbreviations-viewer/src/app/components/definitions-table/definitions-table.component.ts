@@ -23,7 +23,7 @@ export class DefinitionsTableComponent implements OnInit, AfterViewInit {
       ((data: DefinitionItem, filter: string) => boolean);
   private filterFields: {abb?: string, ctx?: string, contrib?: string};
   filterLabel =
-      'Filter (eg. "AV", "abb:av", "ctx:motional DOG", "ctx:mcu Aurix abb:D" etc.)';
+      'Filter (eg. "AV", "abb:av", "ctx:motional DOG", "contrib:sid Aurix abb:D" etc.)';
   adminView = false;
   definitions: MatTableDataSource<DefinitionItem>;
   displayedColumns: string[] =
