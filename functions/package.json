@@ -18,7 +18,7 @@
     "@slack/web-api": "^5.14.0",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
-    "firebase-admin": "^9.2.0",
+    "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.11.0",
     "fs": "^0.0.1-security",
     "qs": "^6.7.0"
