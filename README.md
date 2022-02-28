@@ -19,7 +19,7 @@ Setup for functions
 
 ```sh
 firebase login
-firebase functions:config:get > funcions/.runtimeconfig.json
+firebase functions:config:get > functions/.runtimeconfig.json
 ```
 
 For debugging:
@@ -66,6 +66,8 @@ export const firebaseConfig = {
   measurementId: "G-MEASUREMENT_ID",
 };
 ```
+
+**Note**: You may be using a different apiKey for local development (for instance one that binds to your local IP address only), as the firebase `browser key`, should be rightfully configured to to have website restrictions (which of course will not include the `localhost`).
 
 ### 2.2 Start a local, debug-able front-end Angular application
 
