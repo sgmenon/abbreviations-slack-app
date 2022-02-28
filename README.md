@@ -71,7 +71,7 @@ export const firebaseConfig = {
 
 ### 2.2 Start a local, debug-able front-end Angular application
 
-Run the steps in section `1`. Then run:
+Run the steps in the previous sections. Then run:
 
 ```sh
 cd abbreviations-viewer
@@ -83,8 +83,12 @@ Now visit `localhost:4200`.
 
 If you just started the emulator, there won't be any data. To seed this with real data (using the December 2020 snapshot of the app) do this:
 
+1. Create some CSV file with the following columns `[abbreviation,	expansion,	context,	description]`, or download it from the live website, by visiting `https://www.replace-with-live-url.com/main?admin=1`.
+1. Upload the CSV file at the emulated firebase storage's website. By default the emulator's website is `http://localhost:4000/storage`.
+    1. First create a sub-folder named `acronyms`. 
+    1. Within this subfolder upload the CSV you created/downloaded in the previous step.
 1. Visit `http://localhost:4200/main?admin=1`
-1. Click the upload button use the snapshot: `snapshot_1607451754712.csv`. Then hit "Ok".
+1. Click the upload button and use the name (without the `acronym/` prefix) of the csv file that you just uploaded to the emulated firebase storage. Then hit "Ok".
 
 ## 3. Deploying the app
 
